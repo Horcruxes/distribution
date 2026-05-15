@@ -15,10 +15,13 @@ PKG_DEPENDS_TARGET="toolchain"
 PKG_DEPENDS_UNPACK="spirv-headers"
 PKG_LONGDESC="The SPIR-V Tools project provides an API and commands for processing SPIR-V modules."
 
-PKG_CMAKE_OPTS_HOST="-DSPIRV_SKIP_TESTS=ON"
+PKG_CMAKE_OPTS_HOST="-DSPIRV_SKIP_TESTS=ON \
+                     -DSPIRV_WERROR=OFF"
 PKG_CMAKE_OPTS_TARGET="-DSPIRV_SKIP_TESTS=ON \
                        -DSPIRV_SKIP_EXECUTABLES=ON \
-                       -DBUILD_SHARED_LIBS=ON"
+                       -DBUILD_SHARED_LIBS=ON \
+                       -DSPIRV_WERROR=OFF"
+
 
 post_unpack() {
   mkdir -p ${PKG_BUILD}/external/spirv-headers
