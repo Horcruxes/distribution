@@ -928,7 +928,6 @@ makeinstall_target() {
       ;;
     SM8550)
       add_emu_core n64 daedalusx64 daedalusx64-sa false
-      add_emu_core n64 false
       add_emu_core n64 ares ares-sa false
       install_script "Start DaedalusX64.sh"
       ;;
