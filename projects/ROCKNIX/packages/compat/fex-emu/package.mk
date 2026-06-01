@@ -75,7 +75,7 @@ make_target() {
 
   case ${TARGET_CPU} in
     cortex-x3|cortex-x4)
-      TUNE_CPU="cortex-a78"
+      TUNE_CPU="cortex-a715"
       ;;
     *)
       TUNE_CPU="${TARGET_CPU##*.}"
