@@ -65,7 +65,7 @@ case "${DEVICE}" in
     LIBRETRO_CORES+=" beetle-psx-lr beetle-saturn-lr bsnes-lr bsnes-hd-lr dolphin-lr kronos-lr"
     ;;
   SM8650|SM8750)
-    PKG_EMUS+=" aethersx2-sa ares-sa azahar-sa bigpemu-sa cemu-sa dolphin-sa gopher64-sa heroic mednafen melonds-sa nanoboyadvance-sa rpcs3-sa supermodel-sa \
+    PKG_EMUS+=" aethersx2-sa ares-sa azahar-sa bigpemu-sa cemu-sa dolphin-sa heroic mednafen melonds-sa nanoboyadvance-sa rpcs3-sa supermodel-sa \
                 xemu-sa skyemu-sa steam vita3k-sa"
     LIBRETRO_CORES+=" beetle-psx-lr beetle-saturn-lr bsnes-lr bsnes-hd-lr dolphin-lr kronos-lr"
     ;;
@@ -893,14 +893,16 @@ makeinstall_target() {
       ;;
     SM8550)
       add_emu_core n64 daedalusx64 daedalusx64-sa false
-      add_emu_core n64 false
       add_emu_core n64 ares ares-sa false
       install_script "Start DaedalusX64.sh"
       ;;
+<<<<<<< HEAD
     SM8650|SM8750)
       add_emu_core n64 gopher64 gopher64-sa false
       add_emu_core n64 ares ares-sa false
       ;;
+=======
+>>>>>>> 9693392225 (remove empty entry)
   esac
   add_es_system n64
 
