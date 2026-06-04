@@ -896,13 +896,10 @@ makeinstall_target() {
       add_emu_core n64 ares ares-sa false
       install_script "Start DaedalusX64.sh"
       ;;
-<<<<<<< HEAD
     SM8650|SM8750)
       add_emu_core n64 gopher64 gopher64-sa false
       add_emu_core n64 ares ares-sa false
       ;;
-=======
->>>>>>> 9693392225 (remove empty entry)
   esac
   add_es_system n64
 
