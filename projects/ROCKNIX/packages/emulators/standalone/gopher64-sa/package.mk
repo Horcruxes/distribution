@@ -19,7 +19,9 @@ make_target() {
   export CXX=${TARGET_NAME}-g++
 
   export FREETYPE2_INCLUDE_PATH="${SYSROOT_PREFIX}/usr/include/freetype2"
-
+  # Make bindgen load the matching libclang from the ROCKNIX toolchain
+  export LLVM_CONFIG_PATH="${TOOLCHAIN}/bin/llvm-config"
+  export LIBCLANG_PATH="${TOOLCHAIN}/lib"
   export BINDGEN_EXTRA_CLANG_ARGS="--sysroot=${SYSROOT_PREFIX} --target=${TARGET_NAME}"
 
   export SKIA_GN_ARGS="
