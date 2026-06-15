@@ -2,11 +2,10 @@
 # Copyright (C) 2023-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="libplacebo"
-PKG_VERSION="7.351.0"
-PKG_SHA256="716954501d9b76e6906fddda66febc5886493d0673dd265ec1e6e52f4e5cd7c6"
-PKG_LICENSE="LGPLv2.1"
+PKG_VERSION="52314e0e435fbcb731e326815d4091ed0ba27475"
+PKG_LICENSE="GPLv2+"
 PKG_SITE="https://code.videolan.org/videolan/libplacebo"
-PKG_URL="https://github.com/haasn/libplacebo/archive/refs/tags/v${PKG_VERSION}.tar.gz"
+PKG_URL="${PKG_SITE}.git"
 PKG_DEPENDS_TARGET="toolchain glad:host"
 PKG_DEPENDS_UNPACK="vulkan-headers"
 PKG_LONGDESC="Reusable library for GPU-accelerated image/video processing primitives and shaders"
