@@ -71,7 +71,7 @@ EOF
 
   ### Fix and migrate to autostart package
   enable_service rocknix-autostart.service
-  
+
   ### ZRAM/Swap and Memory Manager Service
   enable_service rocknix-memory-manager.service
 
@@ -80,9 +80,8 @@ EOF
 
   sed -i "s#@DEVICENAME@#${DEVICE}#g" ${INSTALL}/usr/config/system/configs/system.cfg
 
-  ### Defaults for non-main builds.
-  BUILD_BRANCH="$(git branch --show-current)"
-  if [ ! "${BUILD_BRANCH}" = "main" ]
+  ### Defaults for community builds.
+  if [ "${OS_BUILD}" = "community" ]
   then
     sed -i "s#samba.enabled=0#samba.enabled=1#g" ${INSTALL}/usr/config/system/configs/system.cfg
     sed -i "s#ssh.enabled=0#ssh.enabled=1#g" ${INSTALL}/usr/config/system/configs/system.cfg
@@ -95,5 +94,4 @@ EOF
   then
     enable_service hdmi-hotplug.path
   fi
-
 }
