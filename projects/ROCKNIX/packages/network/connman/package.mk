@@ -4,8 +4,7 @@
 # Copyright (C) 2023 JELOS (https://github.com/JustEnoughLinuxOS)
 
 PKG_NAME="connman"
-PKG_VERSION="1.44"
-PKG_SHA256="d751da9858a6e3dfe70d6c98e71ea4f5896e1c92c5e1b17f10d055eaeae0e452"
+PKG_VERSION="1.43" # 1.43
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.connman.net"
 PKG_URL="https://git.kernel.org/pub/scm/network/connman/connman.git/snapshot/connman-${PKG_VERSION}.tar.gz"
