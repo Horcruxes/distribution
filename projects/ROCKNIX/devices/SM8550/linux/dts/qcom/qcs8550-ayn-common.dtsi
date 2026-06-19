@@ -961,6 +961,42 @@
 	};
 };
 
+&gpu_opp_table {
+	/* Additional speedbin for Adreno A32
+	 719000000 RPMH_REGULATOR_LEVEL_SVS_L2
+	 746000000 RPMH_REGULATOR_LEVEL_NOM
+	 794000000 RPMH_REGULATOR_LEVEL_NOM_L1
+	 827000000 RPMH_REGULATOR_LEVEL_TURBO
+	 */
+	opp-719000000 {
+		opp-hz = /bits/ 64 <719000000>;
+		opp-level = <RPMH_REGULATOR_LEVEL_SVS_L2>;
+		opp-peak-kBps = <10687500>; // Level 7
+		qcom,opp-acd-level = <0x882e5ffd>;
+	};
+
+	opp-746000000 {
+		opp-hz = /bits/ 64 <746000000>;
+		opp-level = <RPMH_REGULATOR_LEVEL_NOM>;
+		opp-peak-kBps = <10687500>; // Level 7
+		qcom,opp-acd-level = <0x882e5ffd>;
+	};
+
+	opp-794000000 {
+		opp-hz = /bits/ 64 <794000000>;
+		opp-level = <RPMH_REGULATOR_LEVEL_NOM_L1>;
+		opp-peak-kBps = <14398438>; // Level 8
+		qcom,opp-acd-level = <0xa82d5ffd>;
+	};
+
+	opp-827000000 {
+		opp-hz = /bits/ 64 <827000000>;
+		opp-level = <RPMH_REGULATOR_LEVEL_TURBO>;
+		opp-peak-kBps = <16500000>; // Level 9
+		qcom,opp-acd-level = <0xa82d5ffd>;
+	};
+};
+
 &i2c0 {
 	clock-frequency = <400000>;
 	status = "okay";
