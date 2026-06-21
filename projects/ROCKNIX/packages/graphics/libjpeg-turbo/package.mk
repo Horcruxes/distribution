@@ -4,10 +4,11 @@
 # Copyright (C) 2023 JELOS (https://github.com/JustEnoughLinuxOS)
 
 PKG_NAME="libjpeg-turbo"
-PKG_VERSION="3.0.1"
+PKG_VERSION="3.1.1"
+PKG_SHA256="aadc97ea91f6ef078b0ae3a62bba69e008d9a7db19b34e4ac973b19b71b4217c"
 PKG_LICENSE="GPL"
 PKG_SITE="https://libjpeg-turbo.org/"
-PKG_URL="https://github.com/libjpeg-turbo/libjpeg-turbo/archive/${PKG_VERSION}.tar.gz"
+PKG_URL="https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_HOST="toolchain:host"
 PKG_DEPENDS_TARGET="toolchain"
 PKG_LONGDESC="A high-speed version of libjpeg for x86 and x86-64 processors which uses SIMD."

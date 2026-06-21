@@ -66,6 +66,7 @@ pre_configure_host() {
   echo "LDFLAGS are $LDFLAGS"
 
   unset HOST_CMAKE_OPTS
+  PKG_CMAKE_OPTS_HOST+=" -DQLITEHTML_USE_SYSTEM_LITEHTML=OFF"
   # Disable unneeded modules
   MODULES_TO_DISABLE=("qt3d" "qt5compat" "qtactiveqt" "qtcharts" "qtcoap" "qtconnectivity" "qtdatavis3d"
                       "qtdoc" "qtgraphs" "qtgrpc" "qthttpserver" "qtlocation" "qtlottie" "qtmqtt"
@@ -98,6 +99,7 @@ pre_configure_host() {
 
 pre_configure_target(){
   unset TARGET_CMAKE_OPTS
+  PKG_CMAKE_OPTS_TARGET+=" -DQLITEHTML_USE_SYSTEM_LITEHTML=OFF"
   # Disable unneeded modules
   MODULES_TO_DISABLE=("qt3d" "qt5compat" "qtactiveqt" "qtcharts" "qtcoap" "qtconnectivity" "qtdatavis3d"
                       "qtdoc" "qtgraphs" "qtgrpc" "qthttpserver" "qtimageformats"
