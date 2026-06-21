@@ -12,6 +12,9 @@ PKG_TOOLCHAIN="cmake"
 PKG_PATCH_DIRS+="${DEVICE}"
 
 case ${DEVICE} in
+  SM8650|SM8750|SM8550|SM8250)
+    PKG_PATCH_DIRS+=" xbox"
+  ;;
   *)
     PKG_PATCH_DIRS+=" legacy"
   ;;
