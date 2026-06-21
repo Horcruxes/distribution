@@ -16,7 +16,7 @@ case $1 in
     set_setting enable.gpu-overclock 0
   ;;
   reasonable)
-    echo 827000000 > $GPU_FREQ/max_freq
+    echo 692000000 > $GPU_FREQ/max_freq
     set_setting enable.gpu-overclock 1
   ;;
   enable)

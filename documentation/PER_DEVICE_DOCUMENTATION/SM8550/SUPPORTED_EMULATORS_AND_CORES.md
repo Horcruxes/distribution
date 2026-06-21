@@ -51,7 +51,11 @@
 |Microsoft|DOS (pc)|1981|`pc`|.com .bat .exe .dosz|**retroarch:** dosbox_pure (default)<br>**retroarch:** dosbox_core<br>|
 |Microsoft|MSX (msx)|1983|`msx`|.dsk .mx1 .mx2 .rom .zip .7z .m3u|**retroarch:** bluemsx (default)<br>**retroarch:** fmsx<br>**ares:** ares-sa<br>**ares:** ares-sa<br>|
 |Microsoft|MSX 2 (msx2)|1988|`msx2`|.dsk .mx1 .mx2 .rom .zip .7z .m3u|**retroarch:** bluemsx (default)<br>**retroarch:** fmsx<br>|
+<<<<<<< Updated upstream
 |Microsoft|Windows (windows)|System|`windows`|.sh|**wine:** wine (default)<br>|
+=======
+|Microsoft|Windows (windows)|System|`windows`|.sh .exe|**wine:** wine (default)<br>**umu-launcher:** umu-launcher-sa<br>|
+>>>>>>> Stashed changes
 |Microsoft|Xbox (xbox)|2001|`xbox`|.iso|**xemu:** xemu-sa (default)<br>|
 |NEC|PC Engine (pcengine)|1987|`pcengine`|.pce .bin .zip .7z|**retroarch:** beetle_pce_fast (default)<br>**retroarch:** beetle_pce<br>**retroarch:** beetle_supergrafx<br>**retroarch:** geargrafx<br>**mednafen:** pce<br>**mednafen:** pce_fast<br>**ares:** ares-sa<br>|
 |NEC|PC Engine CD (pcenginecd)|1988|`pcenginecd`|.cue .ccd .chd .toc .m3u|**retroarch:** beetle_pce_fast (default)<br>**retroarch:** beetle_pce<br>**retroarch:** beetle_supergrafx<br>**retroarch:** geargrafx<br>**mednafen:** pce<br>**mednafen:** pce_fast<br>**ares:** ares-sa<br>|
