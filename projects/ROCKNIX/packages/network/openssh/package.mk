@@ -48,6 +48,7 @@ post_makeinstall_target() {
 
   sed -e "s|^#PermitRootLogin.*|PermitRootLogin yes|g" \
       -e "s|^#StrictModes.*|StrictModes no|g" \
+      -e "s|^#X11Forwarding.*|X11Forwarding yes|g" \
       -i ${INSTALL}/etc/ssh/sshd_config
 
   debug_strip ${INSTALL}/usr
