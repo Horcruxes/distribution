@@ -7,7 +7,7 @@ PKG_VERSION="9.8p1"
 PKG_LICENSE="OSS"
 PKG_SITE="https://www.openssh.com/"
 PKG_URL="https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/${PKG_NAME}-${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain openssl zlib"
+PKG_DEPENDS_TARGET="toolchain openssl zlib xauth"
 PKG_LONGDESC="An open re-implementation of the SSH package."
 PKG_TOOLCHAIN="autotools"
 PKG_BUILD_FLAGS="+lto"
@@ -29,7 +29,8 @@ PKG_CONFIGURE_OPTS_TARGET="ac_cv_header_rpc_types_h=no \
                            --disable-pututxline \
                            --disable-etc-default-login \
                            --with-keydir=/storage/.cache/ssh \
-                           --without-pam"
+                           --without-pam \
+                           --with-xauth=/usr/bin/xauth"
 
 pre_configure_target() {
   export LD="${CC}"
