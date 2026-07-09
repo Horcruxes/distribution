@@ -15,7 +15,7 @@ case ${DEVICE} in
     PKG_VERSION="${PKG_VERSION_MAJOR}.3"
   ;;
   *)
-    PKG_VERSION_MAJOR="6.10"
+    PKG_VERSION_MAJOR="6.11"
     PKG_VERSION="${PKG_VERSION_MAJOR}.1"
   ;;
 esac
