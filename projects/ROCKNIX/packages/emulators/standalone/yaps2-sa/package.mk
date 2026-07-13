@@ -9,14 +9,10 @@ PKG_URL="${PKG_SITE}/archive/${PKG_VERSION}.tar.gz"
 PKG_LONGDESC="yaps2 is an ARM64-focused PlayStation 2 (PS2) emulator, a fork of PCSX2."
 PKG_DEPENDS_TARGET="toolchain llvm:host SDL3 libpng zlib libjpeg-turbo zstd lz4 libwebp freetype plutosvg curl libpcap ffmpeg libX11 libXext qt6 shaderc"
 PKG_TOOLCHAIN="manual"
-PKG_BUILD_FLAGS="speed"
 
 PCSX2_CMAKE_BASE=(
   -DCMAKE_BUILD_TYPE=Release
-  # Full-tree IPO stays off for Qt (not worth it)...
   -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF
-  # ...but stays on for just the recompiler/VU/EE/IOP core:
-  -DLTO_PCSX2_CORE=ON
   -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON
   -DUSE_VULKAN=ON
   -DUSE_OPENGL=ON
