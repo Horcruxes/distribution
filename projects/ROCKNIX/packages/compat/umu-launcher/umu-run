@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2026-present ROCKNIX (https://github.com/ROCKNIX)
+
+source /etc/profile
+unset MESA_LOADER_DRIVER_OVERRIDE
+
+if [ -z "${PROTONPATH}" ]; then
+  PROTONPATH="$(ls -d /storage/.local/share/Steam/compatibilitytools.d/GE-Proton*-aarch64 2>/dev/null | sort -V | tail -1)"
+  if [ -z "${PROTONPATH}" ]; then
+    echo "Error: GE-Proton not found. Install Steam first." >&2
+    exit 1
+  fi
+fi
+export PROTONPATH
+export GAMEID="${GAMEID:-umu-default}"
+export PYTHONPATH="/usr/lib/@PYVER@/site-packages${PYTHONPATH:+:${PYTHONPATH}}"
+
+exec python3 -m umu "$@"
