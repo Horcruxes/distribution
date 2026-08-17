@@ -1,0 +1,8 @@
+PKG_NAME="xauth"
+PKG_VERSION="1.1.4"
+PKG_SHA256="e9318141464ad7b4dc0f8564a580f0d20f977c85a388cc40d5a766206151c690"
+PKG_LICENSE="MIT-open-group"
+PKG_SITE="https://www.x.org/"
+PKG_URL="https://www.x.org/pub/individual/app/${PKG_NAME}-${PKG_VERSION}.tar.xz"
+PKG_DEPENDS_TARGET="toolchain util-macros libX11 libXau libXext libXmu"
+PKG_LONGDESC="X authority file utility."

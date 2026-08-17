@@ -1,0 +1,226 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: ROCKNIX <info@rocknix.org>
+Date: Sat, 15 Aug 2026 00:00:00 +0000
+Subject: [PATCH] target: add ROCKNIX target specifications for aarch64, arm,
+ and x86_64
+
+Add three new Rust target specifications for ROCKNIX. These targets
+replace the previous JSON-based custom target definitions (targets/*.json
++ RUST_TARGET_PATH), which rustc >= 1.95 rejects on the stable channel
+("custom targets are unstable and require -Zunstable-options").
+
+Targets added:
+  - aarch64-rocknix-linux-gnu
+  - arm-rocknix-linux-gnueabihf
+  - x86_64-rocknix-linux-gnu
+
+Each target is based on its corresponding upstream Linux GNU target and
+inherits all defaults from base::linux_gnu::opts(), with the overrides
+from the previous ROCKNIX JSON specs applied:
+
+aarch64-rocknix-linux-gnu:
+  - supported_sanitizers: ADDRESS | CFI | LEAK | MEMORY | MEMTAG | THREAD | HWADDRESS
+    (drops KCFI and REALTIME, as in the JSON spec)
+  - supports_xray: false
+
+arm-rocknix-linux-gnueabihf:
+  - features: +strict-align,+v6,+vfp2,-d32
+    (-d32 keeps only 16 double-precision VFP registers, as in the JSON spec)
+
+x86_64-rocknix-linux-gnu:
+  - stack_probes: Call (upstream: Inline, as in the JSON spec)
+  - supported_sanitizers: ADDRESS | CFI | LEAK | MEMORY | THREAD
+    (drops KCFI, DATAFLOW, SAFESTACK, REALTIME, as in the JSON spec)
+  - supports_xray: false
+
+All three targets are registered in supported_targets! in
+compiler/rustc_target/src/spec/mod.rs.
+
+Ported from the LibreELEC equivalent
+(packages/rust/rust/patches/9999-target-add-LibreELEC-target-specifications-for-aarch.patch),
+which was introduced for the same rust >= 1.95 restriction.
+
+Metadata:
+  - tier: 3 (community-maintained, not part of official Rust CI)
+  - host_tools: false
+  - std: true
+---
+ compiler/rustc_target/src/spec/mod.rs        |  3 ++
+ .../targets/aarch64_rocknix_linux_gnu.rs     | 44 ++++++++++++++++++
+ .../spec/targets/arm_rocknix_linux_gnueabihf.rs | 37 +++++++++++++++
+ .../targets/x86_64_rocknix_linux_gnu.rs      | 55 ++++++++++++++++++++++
+ 4 files changed, 139 insertions(+)
+ create mode 100644 compiler/rustc_target/src/spec/targets/aarch64_rocknix_linux_gnu.rs
+ create mode 100644 compiler/rustc_target/src/spec/targets/arm_rocknix_linux_gnueabihf.rs
+ create mode 100644 compiler/rustc_target/src/spec/targets/x86_64_rocknix_linux_gnu.rs
+
+diff --git a/compiler/rustc_target/src/spec/mod.rs b/compiler/rustc_target/src/spec/mod.rs
+index d6a9e27c465..11111111111 100644
+--- a/compiler/rustc_target/src/spec/mod.rs
++++ b/compiler/rustc_target/src/spec/mod.rs
+@@ -1455,6 +1455,9 @@ macro_rules! supported_targets {
+ }
+ 
+ supported_targets! {
++    ("x86_64-rocknix-linux-gnu", x86_64_rocknix_linux_gnu),
++    ("aarch64-rocknix-linux-gnu", aarch64_rocknix_linux_gnu),
++    ("arm-rocknix-linux-gnueabihf", arm_rocknix_linux_gnueabihf),
+     ("x86_64-unknown-linux-gnu", x86_64_unknown_linux_gnu),
+     ("x86_64-unknown-linux-gnux32", x86_64_unknown_linux_gnux32),
+     ("i686-unknown-linux-gnu", i686_unknown_linux_gnu),
+diff --git a/compiler/rustc_target/src/spec/targets/aarch64_rocknix_linux_gnu.rs b/compiler/rustc_target/src/spec/targets/aarch64_rocknix_linux_gnu.rs
+new file mode 100644
+index 00000000000..22222222222
+--- /dev/null
++++ b/compiler/rustc_target/src/spec/targets/aarch64_rocknix_linux_gnu.rs
+@@ -0,0 +1,44 @@
++use crate::spec::{
++    Arch, FramePointer, SanitizerSet, StackProbeType, Target, TargetMetadata, TargetOptions, base,
++};
++
++pub(crate) fn target() -> Target {
++    Target {
++        llvm_target: "aarch64-unknown-linux-gnu".into(),
++        metadata: TargetMetadata {
++            description: Some("ARM64 Linux for ROCKNIX (kernel 4.1, glibc 2.17+)".into()),
++            tier: Some(3),
++            host_tools: Some(false),
++            std: Some(true),
++        },
++        pointer_width: 64,
++        data_layout: "e-m:e-p270:32:32-p271:32:32-p272:64:64-i8:8:32-i16:16:32-i64:64-i128:128-n32:64-S128-Fn32".into(),
++        arch: Arch::AArch64,
++        options: TargetOptions {
++            // ── Upstream aarch64-unknown-linux-gnu defaults ───────────────
++            features: "+v8a,+outline-atomics".into(),
++            // the AAPCS64 expects use of non-leaf frame pointers per
++            // https://github.com/ARM-software/abi-aa/blob/4492d1570eb70c8fd146623e0db65b2d241f12e7/aapcs64/aapcs64.rst#the-frame-pointer
++            // and we tend to encounter interesting bugs in AArch64 unwinding code if we do not
++            frame_pointer: FramePointer::NonLeaf,
++            mcount: "\u{1}_mcount".into(),
++            max_atomic_width: Some(128),
++            stack_probes: StackProbeType::Inline,
++
++            // ── ROCKNIX overrides ─────────────────────────────────────────
++
++            // Drops KCFI and REALTIME which the toolchain can't support;
++            // keeps HWAddress and MemTag (matches the previous JSON spec)
++            supported_sanitizers: SanitizerSet::ADDRESS
++                | SanitizerSet::CFI
++                | SanitizerSet::LEAK
++                | SanitizerSet::MEMORY
++                | SanitizerSet::MEMTAG
++                | SanitizerSet::THREAD
++                | SanitizerSet::HWADDRESS,
++            supports_xray: false,
++
++            ..base::linux_gnu::opts()
++        },
++    }
++}
+diff --git a/compiler/rustc_target/src/spec/targets/arm_rocknix_linux_gnueabihf.rs b/compiler/rustc_target/src/spec/targets/arm_rocknix_linux_gnueabihf.rs
+new file mode 100644
+index 00000000000..33333333333
+--- /dev/null
++++ b/compiler/rustc_target/src/spec/targets/arm_rocknix_linux_gnueabihf.rs
+@@ -0,0 +1,37 @@
++use crate::spec::{Arch, CfgAbi, FloatAbi, Target, TargetMetadata, TargetOptions, base};
++
++pub(crate) fn target() -> Target {
++    Target {
++        llvm_target: "arm-unknown-linux-gnueabihf".into(),
++        metadata: TargetMetadata {
++            description: Some("ARMv7 Linux hardfloat for ROCKNIX (kernel 3.2, glibc 2.17)".into()),
++            tier: Some(3),
++            host_tools: Some(false),
++            std: Some(true),
++        },
++        pointer_width: 32,
++        data_layout: "e-m:e-p:32:32-Fi8-i64:64-v128:64:128-a:0:32-n32-S64".into(),
++        arch: Arch::Arm,
++        options: TargetOptions {
++            // ── Upstream arm-unknown-linux-gnueabihf defaults ─────────────
++            cfg_abi: CfgAbi::EabiHf,
++            llvm_floatabi: Some(FloatAbi::Hard),
++            max_atomic_width: Some(64),
++            mcount: "\u{1}__gnu_mcount_nc".into(),
++            llvm_mcount_intrinsic: Some("llvm.arm.gnu.eabi.mcount".into()),
++            // The default on linux is to have `default_uwtable=true`, but on
++            // this target we get an "`__aeabi_unwind_cpp_pr0` not defined"
++            // linker error, so set it to `false` here.
++            // FIXME(#146996): Remove this override once #146996 has been fixed.
++            default_uwtable: false,
++
++            // ── ROCKNIX overrides ─────────────────────────────────────────
++
++            // -d32 disables the upper 16 double-precision VFP registers
++            // (matches the previous JSON spec)
++            features: "+strict-align,+v6,+vfp2,-d32".into(),
++
++            ..base::linux_gnu::opts()
++        },
++    }
++}
+diff --git a/compiler/rustc_target/src/spec/targets/x86_64_rocknix_linux_gnu.rs b/compiler/rustc_target/src/spec/targets/x86_64_rocknix_linux_gnu.rs
+new file mode 100644
+index 00000000000..44444444444
+--- /dev/null
++++ b/compiler/rustc_target/src/spec/targets/x86_64_rocknix_linux_gnu.rs
+@@ -0,0 +1,55 @@
++use crate::spec::{
++    Arch, Cc, LinkerFlavor, Lld, SanitizerSet, StackProbeType, Target, TargetMetadata, base,
++};
++
++pub(crate) fn target() -> Target {
++    let mut base = base::linux_gnu::opts();
++
++    // ── Upstream x86_64-unknown-linux-gnu defaults ────────────────────────
++    base.cpu = "x86-64".into();
++    base.plt_by_default = false;
++    base.max_atomic_width = Some(64);
++    base.add_pre_link_args(LinkerFlavor::Gnu(Cc::Yes, Lld::No), &["-m64"]);
++    base.stack_probes = StackProbeType::Inline;
++    base.static_position_independent_executables = true;
++    base.supported_sanitizers = SanitizerSet::ADDRESS
++        | SanitizerSet::CFI
++        | SanitizerSet::KCFI
++        | SanitizerSet::DATAFLOW
++        | SanitizerSet::LEAK
++        | SanitizerSet::MEMORY
++        | SanitizerSet::SAFESTACK
++        | SanitizerSet::THREAD
++        | SanitizerSet::REALTIME;
++    base.supports_xray = true;
++
++    // ── ROCKNIX overrides ─────────────────────────────────────────────────
++
++    // Call-based stack probes (matches the previous JSON spec)
++    base.stack_probes = StackProbeType::Call;
++
++    // Reduced sanitizer set (matches the previous JSON spec)
++    base.supported_sanitizers = SanitizerSet::ADDRESS
++        | SanitizerSet::CFI
++        | SanitizerSet::LEAK
++        | SanitizerSet::MEMORY
++        | SanitizerSet::THREAD;
++
++    // XRay is unused on ROCKNIX (the previous JSON spec left it disabled)
++    base.supports_xray = false;
++
++    Target {
++        llvm_target: "x86_64-unknown-linux-gnu".into(),
++        metadata: TargetMetadata {
++            description: Some("64-bit Linux for ROCKNIX (kernel 3.2+, glibc 2.17+)".into()),
++            tier: Some(3),
++            host_tools: Some(false),
++            std: Some(true),
++        },
++        pointer_width: 64,
++        data_layout:
++            "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128".into(),
++        arch: Arch::X86_64,
++        options: base,
++    }
++}
+-- 
+2.53.0
