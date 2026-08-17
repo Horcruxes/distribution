@@ -962,6 +962,17 @@
 	};
 };
 
+&gpu_opp_table {
+
+	opp-692000000 {
+		opp-hz = /bits/ 64 <692000000>;
+		opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
+		opp-peak-kBps = <16500000>;
+		qcom,opp-acd-level = <0x882e5ffd>;
+	};
+
+};
+
 &i2c0 {
 	clock-frequency = <400000>;
 	status = "okay";
