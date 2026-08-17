@@ -110,6 +110,10 @@ configure_target() {
 
 # disable icu, there is no buildswitch to disable
 pre_make_target() {
+  rm -f ${PKG_BUILD}/bin/compile_et ${PKG_BUILD}/bin/asn1_compile
+
+  ln -sf ${TOOLCHAIN}/bin/heimdal_compile_et   ${PKG_BUILD}/bin/compile_et
+  ln -sf ${TOOLCHAIN}/bin/heimdal_asn1_compile ${PKG_BUILD}/bin/asn1_compile
   sed -e '/#define HAVE_ICU_I18N 1/d' \
       -e '/#define HAVE_LIBICUI.* 1/d' \
       -i bin/default/include/config.h

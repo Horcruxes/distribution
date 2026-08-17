@@ -1,0 +1,14 @@
+diff --git a/FEXCore/Source/CMakeLists.txt b/FEXCore/Source/CMakeLists.txt
+index 8150844..ed0aae4 100644
+--- a/FEXCore/Source/CMakeLists.txt
++++ b/FEXCore/Source/CMakeLists.txt
+@@ -285,6 +285,10 @@ endfunction()
+ 
+ AddObject(${PROJECT_NAME}_object)
++set_source_files_properties(
++    Interface/Core/Interpreter/Fallbacks/InterpreterFallbacks.cpp
++    PROPERTIES COMPILE_FLAGS "-O0 -fno-lto"
++)
+ AddLibrary(${PROJECT_NAME} STATIC)
+ AddLibrary(${PROJECT_NAME}_shared SHARED)
+ 

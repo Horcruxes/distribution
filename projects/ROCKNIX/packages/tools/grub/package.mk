@@ -3,6 +3,7 @@
 
 PKG_NAME="grub"
 PKG_VERSION="2.14"
+<<<<<<< HEAD
 PKG_SHA256="6dcd64c4c5163870dd4cd89d460d1aa8f59b150e721a1e2b493f88433bc79ca9"
 PKG_LICENSE="GPLv3"
 PKG_SITE="https://www.gnu.org/software/grub/index.html"
@@ -11,12 +12,18 @@ PKG_URL="https://gitlab.freedesktop.org/gnu-grub/grub/-/archive/${PKG_NAME}-${PK
 # 2.14's bootstrap needs AX_CHECK_LINK_FLAG from autoconf-archive
 PKG_DEPENDS_HOST="toolchain:host autoconf-archive:host"
 PKG_DEPENDS_TARGET="toolchain flex freetype:host gettext:host grub:host autoconf-archive:host"
+=======
+PKG_SHA256="bc8d3c73535b8838d8c8e2654d73edc4e6ae8c8acdb45d5df5dc9a1547446d43"
+PKG_ARCH="x86_64"
+PKG_LICENSE="GPL-3.0-or-later"
+PKG_SITE="https://www.gnu.org/software/grub/index.html"
+PKG_URL="https://ftp.gnu.org/gnu/grub/${PKG_NAME}-${PKG_VERSION}.tar.xz"
+PKG_DEPENDS_HOST="toolchain:host"
+PKG_DEPENDS_TARGET="toolchain flex freetype:host gettext:host grub:host"
+>>>>>>> eba8ef9d88 (qwen fix cachyos build)
 PKG_DEPENDS_UNPACK="gnulib"
 PKG_LONGDESC="GRUB is a Multiboot boot loader."
 PKG_TOOLCHAIN="configure"
-
-PKG_NEED_UNPACK="${PROJECT_DIR}/${PROJECT}/bootloader ${PROJECT_DIR}/${PROJECT}/devices/${DEVICE}/bootloader"
-PKG_NEED_UNPACK+=" ${PROJECT_DIR}/${PROJECT}/options ${PROJECT_DIR}/${PROJECT}/devices/${DEVICE}/options"
 
 pre_configure_host() {
   unset CFLAGS
@@ -25,6 +32,7 @@ pre_configure_host() {
   unset LDFLAGS
   unset CPP
 
+<<<<<<< HEAD
   # autoconf-archive installs its macros into the sysroot, off aclocal's default path
   export ACLOCAL_PATH="${SYSROOT_PREFIX}/usr/share/aclocal"
 
@@ -35,6 +43,8 @@ pre_configure_host() {
   mkdir -p .${HOST_NAME}
     cd .${HOST_NAME}
 
+=======
+>>>>>>> eba8ef9d88 (qwen fix cachyos build)
   # GCC 15+ warns of character assignment that omits the terminal null
   # character.  This flag disables the warning.  GCC<15 should be unaffected.
   export CFLAGS="${CFLAGS} -Wno-unterminated-string-initialization"
@@ -51,6 +61,7 @@ pre_configure_target() {
   unset LDFLAGS
   unset CPP
 
+<<<<<<< HEAD
   # autoconf-archive installs its macros into the sysroot, off aclocal's default path
   export ACLOCAL_PATH="${SYSROOT_PREFIX}/usr/share/aclocal"
 
@@ -61,6 +72,8 @@ pre_configure_target() {
   mkdir -p .${TARGET_NAME}
     cd .${TARGET_NAME}
 
+=======
+>>>>>>> eba8ef9d88 (qwen fix cachyos build)
   # configure requires explicit TARGET_PREFIX binaries when cross compiling.
   export TARGET_CC="${TARGET_PREFIX}gcc"
   export TARGET_OBJCOPY="${TARGET_PREFIX}objcopy"
@@ -78,9 +91,15 @@ make_target() {
 }
 
 makeinstall_target() {
-  ${PKG_BUILD}/.${HOST_NAME}/grub-mkimage -d grub-core -o bootaa64.efi -O arm64-efi -p /boot/grub \
-    boot linux ext2 fat squash4 part_msdos part_gpt normal search search_fs_file search_fs_uuid \
-    search_label chain reboot loadenv test gfxterm efi_gop
+  ${PKG_BUILD}/.${HOST_NAME}/grub-mkimage -d grub-core -o bootia32.efi -O i386-efi -p /EFI/BOOT \
+    boot chain configfile ext2 fat linux search efi_gop \
+    efi_uga part_gpt gzio gettext loadenv loadbios memrw
+
+  mkdir -p ${INSTALL}/usr/share/grub
+     cp -P bootia32.efi ${INSTALL}/usr/share/grub
+
+  mkdir -p ${TOOLCHAIN}/share/grub
+     cp -P bootia32.efi ${TOOLCHAIN}/share/grub
 
   mkdir -p ${INSTALL}/usr/share/bootloader/boot/grub
     cp -av ${PKG_DIR}/config/* ${INSTALL}/usr/share/bootloader/boot/grub
