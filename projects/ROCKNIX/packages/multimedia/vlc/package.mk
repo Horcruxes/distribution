@@ -184,7 +184,8 @@ pre_configure_target() {
   esac
 
   PKG_CONFIGURE_OPTS_TARGET="${DISABLED_FEATURES} ${ENABLED_FEATURES}"
-  export LDFLAGS="${LDFLAGS} -lresolv -fopenmp -Wl,-rpath,../src/.libs"
+  # the toolchain is built with --disable-libgomp, so no -fopenmp here
+  export LDFLAGS="${LDFLAGS} -lresolv -Wl,-rpath,../src/.libs"
 }
 
 post_makeinstall_target() {

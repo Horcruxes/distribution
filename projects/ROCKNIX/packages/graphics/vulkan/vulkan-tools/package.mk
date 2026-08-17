@@ -1,14 +1,15 @@
 # SPDX-License-Identifier: GPL-2.0
 # Copyright (C) 2018-present Frank Hartung (supervisedthinking (@) gmail.com)
 # Copyright (C) 2021-present Team LibreELEC (https://libreelec.tv)
+# Copyright (C) 2026 ROCKNIX (https://github.com/ROCKNIX)
 
 PKG_NAME="vulkan-tools"
-PKG_VERSION="1.4.347"
-PKG_SHA256="4ed73bd973069633ef2b830c7b9f3ebcb7bc8aaac5783b9e5aa36c888e687a78"
+PKG_VERSION="1.4.359"
+PKG_SHA256="64b7e72d8838348be97f2f04b2757469ac828676376dbbd671165a0bb21194a5"
 PKG_LICENSE="Apache-2.0"
 PKG_SITE="https://github.com/KhronosGroup/Vulkan-Tools"
 PKG_URL="https://github.com/KhronosGroup/Vulkan-tools/archive/v${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain vulkan-loader glslang:host Python3:host volk wayland"
+PKG_DEPENDS_TARGET="toolchain vulkan-loader glslang:host Python3:host volk"
 PKG_LONGDESC="This project provides Khronos official Vulkan Tools and Utilities."
 
 configure_package() {
@@ -16,7 +17,7 @@ configure_package() {
   if [ "${DISPLAYSERVER}" = "x11" ]; then
     PKG_DEPENDS_TARGET+=" libxcb libX11"
   elif [ "${DISPLAYSERVER}" = "wl" ]; then
-    PKG_DEPENDS_TARGET+=" wayland"
+    PKG_DEPENDS_TARGET+=" libxcb libX11 wayland"
   fi
 }
 
@@ -37,6 +38,10 @@ pre_configure_target() {
                              -DBUILD_WSI_WAYLAND_SUPPORT=OFF \
                              -DCUBE_WSI_SELECTION=XCB"
   elif [ "${DISPLAYSERVER}" = "wl" ]; then
+    # Enable all three WSI backends on Wayland so that:
+    # - Native Wayland apps use the Wayland WSI
+    # - X11 apps (e.g. rpcs3, other X11 emulators) running via Xwayland
+    #   can use XCB or XLIB WSI paths.
     PKG_CMAKE_OPTS_TARGET+=" -DBUILD_CUBE=ON \
                              -DBUILD_WSI_XCB_SUPPORT=ON \
                              -DBUILD_WSI_XLIB_SUPPORT=ON \

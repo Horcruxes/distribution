@@ -2,8 +2,7 @@
 # Copyright (C) 2024-present ROCKNIX (https://github.com/ROCKNIX)
 
 PKG_NAME="qt6"
-PKG_VERSION="6.10.3"
-PKG_SHA256="cbc81e726b0ff3c0cdb0219bf74545e91cec013c4a8503c20f93f83d73dff5d2"
+PKG_VERSION="6.11.1"
 PKG_LICENSE="GPL"
 PKG_SITE="https://download.qt.io"
 PKG_URL="${PKG_SITE}/archive/qt/${PKG_VERSION%.*}/${PKG_VERSION}/single/qt-everywhere-src-${PKG_VERSION}.tar.xz"
@@ -49,10 +48,11 @@ fi
 
 pre_configure_host() {
   unset HOST_CMAKE_OPTS
+  PKG_CMAKE_OPTS_HOST+=" -DQLITEHTML_USE_SYSTEM_LITEHTML=OFF"
   # Disable unneeded modules
-  MODULES_TO_DISABLE=("qt3d" "qt5compat" "qtactiveqt" "qtcharts" "qtcoap" "qtconnectivity" "qtdatavis3d"
+  MODULES_TO_DISABLE=("qt3d" "qt5compat" "qtactiveqt" "qtcoap" "qtconnectivity" "qtdatavis3d"
                       "qtdoc" "qtgraphs" "qtgrpc" "qthttpserver" "qtlocation" "qtlottie" "qtmqtt"
-                      "qtmultimedia" "qtnetworkauth" "qtopcua" "qtpositioning" "qtquick3d" "qtquick3dphysics"
+                      "qtnetworkauth" "qtopcua" "qtpositioning" "qtquick3d" "qtquick3dphysics"
                       "qtquickeffectmaker" "qtquicktimeline" "qtremoteobjects" "qtscxml" "qtsensors" "qtserialbus"
                       "qtserialport" "qtspeech" "qttranslations" "qtvirtualkeyboard" "qtwayland" "qtwebchannel"
                       "qtwebengine" "qtwebsockets" "qtwebview")
@@ -81,8 +81,9 @@ pre_configure_host() {
 
 pre_configure_target(){
   unset TARGET_CMAKE_OPTS
+  PKG_CMAKE_OPTS_TARGET+=" -DQLITEHTML_USE_SYSTEM_LITEHTML=OFF"
   # Disable unneeded modules
-  MODULES_TO_DISABLE=("qt3d" "qt5compat" "qtactiveqt" "qtcharts" "qtcoap" "qtconnectivity" "qtdatavis3d"
+  MODULES_TO_DISABLE=("qt3d" "qt5compat" "qtactiveqt" "qtcoap" "qtconnectivity" "qtdatavis3d"
                       "qtdoc" "qtgraphs" "qtgrpc" "qthttpserver" "qtimageformats"
                       "qtlocation" "qtlottie" "qtmqtt" "qtnetworkauth" "qtopcua" "qtpositioning"
                       "qtquick3d" "qtquick3dphysics" "qtquickeffectmaker" "qtquicktimeline" "qtremoteobjects"

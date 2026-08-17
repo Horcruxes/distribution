@@ -3,11 +3,11 @@
 # Copyright (C) 2023 JELOS (https://github.com/JustEnoughLinuxOS)
 
 PKG_NAME="file"
-PKG_VERSION="c5eb6d6"
-PKG_SHA256="94df886d24a3ae1c550b436da395ba1d79ab32991bc8e1a3cdf14ce106b3d6ef"
+PKG_VERSION="5.48"
+PKG_SHA256="76cefc3a662ab0e9f45db941b0a56e71705abad0690da19a5c32379cc6de3488"
 PKG_LICENSE="BSD"
 PKG_SITE="http://www.darwinsys.com/file/"
-PKG_URL="https://github.com/file/file/archive/${PKG_VERSION}.tar.gz"
+PKG_URL="https://github.com/file/file/archive/FILE${PKG_VERSION/./_}.tar.gz"
 PKG_DEPENDS_HOST="ccache:host autotools:host"
 PKG_DEPENDS_TARGET="toolchain file:host zlib"
 PKG_LONGDESC="The file utility is used to determine the types of various files."

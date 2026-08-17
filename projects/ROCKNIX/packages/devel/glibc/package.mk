@@ -3,9 +3,9 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="glibc"
-PKG_VERSION="2.41"
-PKG_SHA256="a5a26b22f545d6b7d7b3dd828e11e428f24f4fac43c934fb071b6a7d0828e901"
-PKG_LICENSE="GPL"
+PKG_VERSION="2.44"
+PKG_SHA256="37f600f2bef3c5e8300147059568b2a2e40a7ad6ccc65ce942556d49429cc667"
+PKG_LICENSE="LGPL-2.1-or-later"
 PKG_SITE="https://www.gnu.org/software/libc/"
 PKG_URL="https://ftp.gnu.org/pub/gnu/glibc/${PKG_NAME}-${PKG_VERSION}.tar.xz"
 PKG_DEPENDS_TARGET="ccache:host autotools:host linux:host gcc:bootstrap pigz:host Python3:host"
@@ -18,7 +18,7 @@ case "${DEVICE}" in
     OPT_ENABLE_KERNEL=6.1.0
     ;;
   *)
-    OPT_ENABLE_KERNEL=6.10.0
+    OPT_ENABLE_KERNEL=7.1.2
     ;;
 esac
 
@@ -47,6 +47,7 @@ PKG_CONFIGURE_OPTS_TARGET="BASH_SHELL=/bin/sh \
                            --without-gd \
                            --disable-build-nscd \
                            --disable-nscd \
+                           --disable-werror \
                            --disable-timezone-tools"
 
 if build_with_debug; then

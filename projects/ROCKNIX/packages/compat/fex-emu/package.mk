@@ -14,6 +14,11 @@ PKG_TOOLCHAIN="manual"
 FEX_LLVM_BIN="${TOOLCHAIN}/bin"
 FEX_CLANG="${FEX_LLVM_BIN}/clang"
 FEX_CLANGXX="${FEX_LLVM_BIN}/clang++"
+
+pre_configure_target() {
+  :
+}
+
 FEX_CMAKE_BASE=(
   -DCMAKE_BUILD_TYPE=Release
   -DENABLE_LTO=True
@@ -69,17 +74,13 @@ make_target() {
   for _v in CFLAGS CXXFLAGS LDFLAGS; do
     export ${_v}="$(echo ${!_v} | sed 's/-mabi=lp64//g; s/-mtune=[^ ]*//g')"
   done
-  export USER="${USER:-$(whoami)}"
-  export HOME=${PKG_BUILD}/nix
-  curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
-  . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
 
   mkdir -p "${PKG_BUILD}/.${TARGET_NAME}"
   cd "${PKG_BUILD}/.${TARGET_NAME}"
 
   case ${TARGET_CPU} in
     cortex-x3|cortex-x4)
-      TUNE_CPU="cortex-a78"
+      TUNE_CPU="cortex-a710"
       ;;
     *)
       TUNE_CPU="${TARGET_CPU##*.}"
@@ -105,9 +106,15 @@ make_target() {
     -DCMAKE_INSTALL_LIBDIR=lib
     -DQT_HOST_PATH="${TOOLCHAIN}/usr/local/qt6"
     -DTUNE_CPU="${TUNE_CPU}"
+
+    # Force lld for all linkers (override system default bfd)
+    -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld -Wl,--as-needed"
+    -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld -Wl,--as-needed"
+    -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld -Wl,--as-needed"
+    -DCMAKE_C_LINKER_FLAGS="-fuse-ld=lld"
+    -DCMAKE_CXX_LINKER_FLAGS="-fuse-ld=lld"
   )
   cmake "${tgt_opts[@]}"
-  bash "${PKG_BUILD}/Data/nix/cmake_enable_libfwd.sh"
   ninja
 }
 

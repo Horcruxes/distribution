@@ -12,7 +12,9 @@ PKG_DEPENDS_HOST="ccache:host m4:host"
 PKG_LONGDESC="A general-purpose parser generator."
 PKG_BUILD_FLAGS="-parallel -cfg-libs:host"
 
-PKG_CONFIGURE_OPTS_HOST="--disable-rpath --with-gnu-ld"
+# system libtextstyle links against versioned tinfo symbols that are not
+# resolvable here, so force the libtextstyle probe off
+PKG_CONFIGURE_OPTS_HOST="--disable-rpath --with-gnu-ld ac_cv_libtextstyle=no"
 
 post_configure_host() {
   # The configure system causes Bison to be built without support for

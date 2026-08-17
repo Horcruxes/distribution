@@ -3,12 +3,12 @@
 # Copyright (C) 2018-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="openssh"
-PKG_VERSION="9.8p1"
-PKG_SHA256="dd8bd002a379b5d499dfb050dd1fa9af8029e80461f4bb6c523c49973f5a39f3"
-PKG_LICENSE="OSS"
+PKG_VERSION="10.4p1"
+PKG_SHA256="ef6026dd2aea8d56059638d5d3262902c892ceba9f88395835e0d06d3fb63238"
+PKG_LICENSE="BSD-2-Clause AND ISC"
 PKG_SITE="https://www.openssh.com/"
 PKG_URL="https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/${PKG_NAME}-${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain openssl zlib"
+PKG_DEPENDS_TARGET="toolchain openssl zlib xauth"
 PKG_LONGDESC="An open re-implementation of the SSH package."
 PKG_TOOLCHAIN="autotools"
 PKG_BUILD_FLAGS="+lto"
@@ -30,7 +30,8 @@ PKG_CONFIGURE_OPTS_TARGET="ac_cv_header_rpc_types_h=no \
                            --disable-pututxline \
                            --disable-etc-default-login \
                            --with-keydir=/storage/.cache/ssh \
-                           --without-pam"
+                           --without-pam \
+                           --with-xauth=/usr/bin/xauth"
 
 pre_configure_target() {
   export LD="${CC}"
@@ -49,6 +50,7 @@ post_makeinstall_target() {
 
   sed -e "s|^#PermitRootLogin.*|PermitRootLogin yes|g" \
       -e "s|^#StrictModes.*|StrictModes no|g" \
+      -e "s|^#X11Forwarding.*|X11Forwarding yes|g" \
       -i ${INSTALL}/etc/ssh/sshd_config
 
   debug_strip ${INSTALL}/usr
