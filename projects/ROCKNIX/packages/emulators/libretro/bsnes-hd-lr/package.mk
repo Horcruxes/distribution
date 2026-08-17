@@ -11,10 +11,12 @@ PKG_DEPENDS_TARGET="toolchain"
 PKG_LONGDESC="bsnes-hd is a fork of bsnes that adds HD video features such as widescreen, HD Mode 7 and true color"
 PKG_TOOLCHAIN="make"
 
-PKG_MAKE_OPTS_TARGET="-C bsnes target=libretro compiler=${TARGET_NAME}-g++"
+PKG_MAKE_OPTS_TARGET+=" -C bsnes target=libretro compiler=${TARGET_NAME}-g++ openmp=false"
 
 post_unpack() {
   sed -i 's/\-O[23]/-Ofast/' ${PKG_BUILD}/bsnes/GNUmakefile
+  # the toolchain is built with --disable-libgomp, so strip the OpenMP lib too
+  sed -i 's/-lgomp//' ${PKG_BUILD}/bsnes/target-libretro/GNUmakefile
 }
 
 makeinstall_target() {

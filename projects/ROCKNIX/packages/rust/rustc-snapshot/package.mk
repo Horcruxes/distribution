@@ -18,7 +18,7 @@ case "${MACHINE_HARDWARE_NAME}" in
     PKG_URL="https://static.rust-lang.org/dist/rustc-${PKG_VERSION}-${MACHINE_HARDWARE_NAME}-unknown-linux-gnueabihf.tar.xz"
     ;;
   "x86_64")
-    PKG_SHA256="0a6b16ca476461c6238f48efcb74a7aa08a3983e61adf587f208ba48504d87e1"
+    PKG_SHA256="9819d0a32d56bd339585319c80260e332779f5541fd66838ab7e016d6c814819"
     PKG_URL="https://static.rust-lang.org/dist/rustc-${PKG_VERSION}-${MACHINE_HARDWARE_NAME}-unknown-linux-gnu.tar.xz"
     ;;
 esac

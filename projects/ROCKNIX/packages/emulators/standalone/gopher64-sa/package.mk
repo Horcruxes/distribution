@@ -6,7 +6,7 @@ PKG_LICENSE="GPLv3"
 PKG_VERSION="ca4a20f52403bb14f819db53f1cb161d41894666"
 PKG_SITE="https://github.com/gopher64/gopher64"
 PKG_URL="${PKG_SITE}.git"
-PKG_DEPENDS_TARGET="toolchain SDL3 SDL3_ttf cargo:host cargo rust mesa libxss ${VULKAN}"
+PKG_DEPENDS_TARGET="toolchain SDL3 SDL3_ttf cargo:host cargo rust mesa libxss ${VULKAN} liburing"
 PKG_LONGDESC="Gopher64 - Highly compatible N64 emulator"
 PKG_TOOLCHAIN="manual"
 
@@ -26,7 +26,9 @@ make_target() {
   export DEP_SDL3_TTF_OUT_DIR="${SYSROOT_PREFIX}/usr"
 
   export FREETYPE2_INCLUDE_PATH="${SYSROOT_PREFIX}/usr/include/freetype2"
-
+  # Make bindgen load the matching libclang from the ROCKNIX toolchain
+  export LLVM_CONFIG_PATH="${TOOLCHAIN}/bin/llvm-config"
+  export LIBCLANG_PATH="${TOOLCHAIN}/lib"
   export BINDGEN_EXTRA_CLANG_ARGS="--sysroot=${SYSROOT_PREFIX} --target=${TARGET_NAME}"
 
   export SKIA_GN_ARGS="

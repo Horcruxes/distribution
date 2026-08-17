@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2026-present ROCKNIX (https://github.com/ROCKNIX)
+
+source /etc/profile
+unset MESA_LOADER_DRIVER_OVERRIDE
+
+if [ -z "${PROTONPATH}" ]; then
+  # Prefer Steam-managed GE-Proton if available
+  PROTONPATH="$(ls -d /storage/.local/share/Steam/compatibilitytools.d/GE-Proton*-aarch64 2>/dev/null | sort -V | tail -1)"
+  # Fall back to proton-cachyos
+  [ -z "${PROTONPATH}" ] && PROTONPATH="$(ls -d /storage/.local/share/Steam/compatibilitytools.d/proton-cachyos-*-arm64 2>/dev/null | sort -V | tail -1)"
+  # Fall back to umu-managed download
+  [ -z "${PROTONPATH}" ] && PROTONPATH="GE-Latest"
+fi
+export PROTONPATH
+export GAMEID="${GAMEID:-umu-default}"
+export PYTHONPATH="/usr/lib/@PYVER@/site-packages${PYTHONPATH:+:${PYTHONPATH}}"
+
+exec python3 -m umu "$@"
