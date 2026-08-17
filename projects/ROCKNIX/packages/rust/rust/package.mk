@@ -2,9 +2,13 @@
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="rust"
-PKG_VERSION="1.94.1"
-PKG_SHA256="4c142a625f12e3cdf716c68ae19f4f60d98ad1482627b08579b15838e95ad514"
-PKG_LICENSE="MIT"
+# rustc >= 1.95 rejects JSON custom target specs on the stable channel
+# ("custom targets are unstable and require -Zunstable-options"), so the
+# rocknix triples are compiled into rustc instead — see
+# patches/9999-target-add-ROCKNIX-target-specifications.patch
+PKG_VERSION="1.97.1"
+PKG_SHA256="622c2b429c53cbfdc0dd3a51d03554e91cd63ebec1912c1f5709640cdfef1a9d"
+PKG_LICENSE="MIT OR Apache-2.0"
 PKG_SITE="https://www.rust-lang.org"
 PKG_URL="https://static.rust-lang.org/dist/rustc-${PKG_VERSION}-src.tar.gz"
 PKG_DEPENDS_HOST="toolchain llvm:host"
@@ -20,20 +24,8 @@ pre_configure_host() {
 
 configure_host() {
 
-  mkdir -p ${PKG_BUILD}/targets
-
-  case "${TARGET_ARCH}" in
-    "arm")
-      # the arm target is special because we specify the subarch. ie armv8a
-      cp -a ${PKG_DIR}/targets/arm-libreelec-linux-gnueabihf.json ${PKG_BUILD}/targets/${TARGET_NAME}.json
-      ;;
-    "aarch64" | "x86_64")
-      cp -a ${PKG_DIR}/targets/${TARGET_NAME}.json ${PKG_BUILD}/targets/${TARGET_NAME}.json
-      ;;
-  esac
-
   cat >${PKG_BUILD}/config.toml  <<END
-change-id = 148671
+change-id = 154587
 
 [llvm]
 download-ci-llvm = false
@@ -84,7 +76,7 @@ mandir = "${TOOLCHAIN}/share/man"
 
 END
 
-  CARGO_HOME="${TOOLCHAIN}/cargo_home"
+  CARGO_HOME="${PKG_BUILD}/cargo_home"
   mkdir -p "${CARGO_HOME}"
 
   cat >${CARGO_HOME}/config.toml <<END
@@ -113,7 +105,6 @@ make_host() {
   unset CPPFLAGS
   unset LDFLAGS
 
-  export RUST_TARGET_PATH="${PKG_BUILD}/targets/"
   export HOST_CMAKE="${TOOLCHAIN}/bin/cmake"
   export HOST_CMAKE_TOOLCHAIN_FILE="${CMAKE_CONF}"
 
@@ -126,6 +117,4 @@ makeinstall_host() {
 
   mkdir -p ${TOOLCHAIN}/lib/rustlib
     cp -a build/${RUST_HOST}/stage2/lib/* ${TOOLCHAIN}/lib
-
-    cp -a ${PKG_BUILD}/targets/*.json ${TOOLCHAIN}/lib/rustlib/
 }
