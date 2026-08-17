@@ -14,7 +14,7 @@ PKG_TOOLCHAIN="make"
 PKG_MAKE_OPTS_TARGET="REGENIE=1 \
                       VERBOSE=1 \
                       NOWERROR=1 \
-                      OPENMP=1 \
+                      OPENMP=0 \
                       CROSS_BUILD=1 \
                       TOOLS=0 \
                       RETRO=1 \
