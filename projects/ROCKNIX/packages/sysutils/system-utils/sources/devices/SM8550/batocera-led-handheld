@@ -1,0 +1,16 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-2.0
+# Copyright (C) 2024 ROCKNIX (https://github.com/ROCKNIX)
+#
+# No-op wrapper: RP6 uses ledcontrol for all LED management.
+# The ES LED MODE dropdown is kept for UI consistency but does nothing.
+
+case ${1} in
+  block_color_changes|unblock_color_changes|set_color_force_dec|rainbow|chroma|pulse|static)
+    # No-op — all LED control is handled via ledcontrol (LED COLOR menu)
+    ;;
+  *)
+    echo "Unknown batocera-led-handheld command: ${1}" >&2
+    exit 1
+    ;;
+esac
