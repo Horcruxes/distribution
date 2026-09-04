@@ -72,33 +72,6 @@ PKG_CMAKE_OPTS_TARGET+=" -DENABLE_QT=ON \
 post_unpack() {
   sed -i "s|gcc-ar|${TARGET_PREFIX}ar|g" "${PKG_BUILD}/CMakeLists.txt"
   sed -i "s|gcc-ranlib|${TARGET_PREFIX}ranlib|g" "${PKG_BUILD}/CMakeLists.txt"
-<<<<<<< HEAD
-=======
-}
-
-pre_configure_target() {
-  PKG_CMAKE_OPTS_TARGET+=" -DCMAKE_BUILD_TYPE=Release \
-                           -DDISTRIBUTOR="ROCKNIX" \
-                           -DENABLE_NOGUI=ON \
-                           -DENABLE_EVDEV=ON \
-                           -DENABLE_SDL=ON \
-                           -DUSE_DISCORD_PRESENCE=OFF \
-                           -DBUILD_SHARED_LIBS=OFF \
-                           -DLINUX_LOCAL_DEV=OFF \
-                           -DENABLE_PULSEAUDIO=ON \
-                           -DENABLE_ALSA=ON \
-                           -DENABLE_TESTS=OFF \
-                           -DENABLE_LLVM=OFF \
-                           -DENABLE_ANALYTICS=OFF \
-                           -DENABLE_LTO=ON \
-                           -DENCODE_FRAMEDUMPS=OFF \
-                           -DENABLE_AUTOUPDATE=OFF \
-                           -DUSE_MGBA=OFF \
-                           -DENABLE_CLI_TOOL=OFF \
-                           -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-                           -DMBEDTLS_FATAL_WARNINGS=OFF"
-
->>>>>>> c2ea825cec (qwen fix cachyos build)
   sed -i 's~#include <cstdlib>~#include <cstdlib>\n#include <cstdint>~g' ${PKG_BUILD}/Externals/VulkanMemoryAllocator/include/vk_mem_alloc.h
   sed -i 's~#include <cstdint>~#include <cstdint>\n#include <string>~g' ${PKG_BUILD}/Externals/VulkanMemoryAllocator/include/vk_mem_alloc.h
   if [ -n "${PKG_DOLPHIN_VERSION_MAJOR=}" ]; then
