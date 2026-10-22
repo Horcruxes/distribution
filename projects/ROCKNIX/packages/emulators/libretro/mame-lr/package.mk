@@ -27,7 +27,7 @@ esac
 PKG_MAKE_OPTS_TARGET="REGENIE=1 \
 		      VERBOSE=1 \
 		      NOWERROR=1 \
-		      OPENMP=1 \
+		      OPENMP=0 \
 		      CROSS_BUILD=${CROSS_BUILD} \
 		      TOOLS=0 \
 		      RETRO=1 \

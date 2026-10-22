@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2026-present ROCKNIX (https://github.com/ROCKNIX)
+
+source /etc/profile
+unset MESA_LOADER_DRIVER_OVERRIDE
+
+# GE-Proton is a native aarch64 Wine whose builtins are ARM64 PEs. Sharing a
+# prefix with compat/wine (x86_64 under box64) makes wineboot point the prefix's
+# system32 symlinks at the other arch, and the foreign kernel32 then fails to
+# load with STATUS_INVALID_IMAGE_FORMAT. Let umu derive its own prefix instead;
+# it only does so when WINEPREFIX is absent -- an empty value is a hard error.
+unset WINEPREFIX
+
+if [ -z "${PROTONPATH}" ]; then
+  # Prefer Steam-managed GE-Proton if available
+  PROTONPATH="$(ls -d /storage/.local/share/Steam/compatibilitytools.d/GE-Proton*-aarch64 2>/dev/null | sort -V | tail -1)"
+  # Fall back to proton-cachyos
+  [ -z "${PROTONPATH}" ] && PROTONPATH="$(ls -d /storage/.local/share/Steam/compatibilitytools.d/proton-cachyos-*-arm64 2>/dev/null | sort -V | tail -1)"
+  # Fall back to umu-managed download
+  [ -z "${PROTONPATH}" ] && PROTONPATH="GE-Latest"
+fi
+export PROTONPATH
+export GAMEID="${GAMEID:-umu-default}"
+export PYTHONPATH="/usr/lib/@PYVER@/site-packages${PYTHONPATH:+:${PYTHONPATH}}"
+
+exec python3 -m umu "$@"

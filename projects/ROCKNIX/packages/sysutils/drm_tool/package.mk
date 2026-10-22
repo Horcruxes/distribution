@@ -11,7 +11,7 @@ PKG_DEPENDS_TARGET="toolchain libdrm"
 PKG_LONGDESC="A simple tool for getting drm info and setting properties."
 
 pre_configure_target() {
-  export CFLAGS="${TARGET_CFLAGS} -D_FILE_OFFSET_BITS=64 -ldrm"
+  export CFLAGS="${TARGET_CFLAGS} -D_FILE_OFFSET_BITS=64 -I${SYSROOT_PREFIX}/usr/include/libdrm -ldrm"
   export LDFLAGS="${TARGET_LDFLAGS} -ldrm"
 }
 

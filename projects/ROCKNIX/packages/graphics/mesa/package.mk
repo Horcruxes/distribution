@@ -40,6 +40,7 @@ PKG_MESON_OPTS_TARGET="-Dc_link_args=-lgcc \
                        -Dgallium-extra-hud=false \
                        -Dgallium-rusticl=false \
                        -Dshader-cache=enabled \
+                       -Dshared-glapi=enabled \
                        -Dopengl=true \
                        -Dgbm=enabled \
                        -Degl=enabled \
