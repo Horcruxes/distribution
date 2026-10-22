@@ -1,6 +1,12 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-2.0
 # Copyright (C) 2024 ROCKNIX (https://github.com/ROCKNIX)
+#
+# Settings:
+#   led.color     — LED display mode (off/rgb/battery/rainbow/chroma/pulse)
+#                   NOTE: Despite the name "color", this stores the MODE, not RGB values.
+#                   Kept as "led.color" to match upstream EmulationStation naming.
+#   analogsticks.led — RGB color values ("BRIGHTNESS RIGHT_R RIGHT_G RIGHT_B LEFT_R LEFT_G LEFT_B")
 
 . /etc/profile
 
@@ -17,29 +23,145 @@ function led_off() {
   done
 }
 
+RAINBOW_PID_FILE="/tmp/.led_rainbow_pid"
+
+stop_rainbow() {
+  if [ -f "${RAINBOW_PID_FILE}" ]; then
+    kill "$(cat "${RAINBOW_PID_FILE}")" 2>/dev/null
+    rm -f "${RAINBOW_PID_FILE}"
+  fi
+}
+
+function led_rainbow() {
+  STEPS=30
+  DURATION=0.5
+  SLEEP_TIME=$(echo "scale=4; $DURATION/$STEPS" | bc)
+
+  calculate_rainbow_color() {
+    local position=$1
+    local h=$(echo "scale=2; 360*$position/$STEPS" | bc)
+
+    local region=$(echo "scale=0; $h/60" | bc)
+    local remainder=$(echo "scale=2; $h-$region*60" | bc)
+    local fractional=$(echo "scale=2; $remainder/60" | bc)
+
+    local r=0
+    local g=0
+    local b=0
+
+    case $region in
+      0) r=255; g=$(echo "scale=0; 255*$fractional" | bc); b=0 ;;
+      1) r=$(echo "scale=0; 255*(1-$fractional)" | bc); g=255; b=0 ;;
+      2) r=0; g=255; b=$(echo "scale=0; 255*$fractional" | bc) ;;
+      3) r=0; g=$(echo "scale=0; 255*(1-$fractional)" | bc); b=255 ;;
+      4) r=$(echo "scale=0; 255*$fractional" | bc); g=0; b=255 ;;
+      5|6) r=255; g=0; b=$(echo "scale=0; 255*(1-$fractional)" | bc) ;;
+    esac
+
+    r=${r%.*}; g=${g%.*}; b=${b%.*}
+    r=$(( r < 0 ? 0 : r > 255 ? 255 : r ))
+    g=$(( g < 0 ? 0 : g > 255 ? 255 : g ))
+    b=$(( b < 0 ? 0 : b > 255 ? 255 : b ))
+
+    echo "$r $g $b"
+  }
+
+  while true; do
+    for ((i=0; i<STEPS; i++)); do
+      rgb=$(calculate_rainbow_color $i)
+      read r g b <<< "$rgb"
+      /usr/bin/analog_sticks_ledcontrol 255 $r $g $b $r $g $b
+      sleep $SLEEP_TIME
+    done
+  done
+}
+
+function led_chroma() {
+  LEDS_CONFIG=$(get_setting analogsticks.led)
+  read _ RR RG RB LR LG LB <<< "${LEDS_CONFIG}"
+
+  while true; do
+    for ((b=255; b>=0; b--)); do
+      /usr/bin/analog_sticks_ledcontrol $b $RR $RG $RB $LR $LG $LB
+      sleep 0.02
+    done
+    for ((b=0; b<=255; b++)); do
+      /usr/bin/analog_sticks_ledcontrol $b $RR $RG $RB $LR $LG $LB
+      sleep 0.02
+    done
+  done
+}
+
+function led_pulse() {
+  LEDS_CONFIG=$(get_setting analogsticks.led)
+  read _ RR RG RB LR LG LB <<< "${LEDS_CONFIG}"
+
+  while true; do
+    /usr/bin/analog_sticks_ledcontrol 255 $RR $RG $RB $LR $LG $LB
+    sleep 0.5
+    /usr/bin/analog_sticks_ledcontrol 0 $RR $RG $RB $LR $LG $LB
+    sleep 0.5
+  done
+}
+
 case ${1} in
   off)
+    stop_rainbow
     led_off
     set_setting led.color ${1}
   ;;
   rgb)
+    stop_rainbow
     LEDS_CONFIG=$(get_setting analogsticks.led)
+    if [ -z "${LEDS_CONFIG}" ]; then
+      # Default: max brightness, pink color (255 0 165) for both sticks
+      LEDS_CONFIG="255 255 0 165 255 0 165"
+      set_setting analogsticks.led "${LEDS_CONFIG}"
+    fi
     /usr/bin/analog_sticks_ledcontrol ${LEDS_CONFIG}
     set_setting led.color ${1}
   ;;
   battery)
+    stop_rainbow
     led_off
     set_setting led.color ${1}
     systemctl restart batteryledstatus.service
   ;;
+  rainbow)
+    stop_rainbow
+    set_setting led.color ${1}
+    led_rainbow &
+    echo $! > "${RAINBOW_PID_FILE}"
+  ;;
+  chroma)
+    stop_rainbow
+    set_setting led.color ${1}
+    led_chroma &
+    echo $! > "${RAINBOW_PID_FILE}"
+  ;;
+  pulse)
+    stop_rainbow
+    set_setting led.color ${1}
+    led_pulse &
+    echo $! > "${RAINBOW_PID_FILE}"
+  ;;
   poweroff)
+    stop_rainbow
     led_off
+  ;;
+  brightness)
+    stop_rainbow
+    LEDS_CONFIG=$(get_setting analogsticks.led)
+    /usr/bin/analog_sticks_ledcontrol ${1} ${LEDS_CONFIG}
   ;;
   list)
 cat <<EOF
 off
 rgb
 battery
+rainbow
+chroma
+pulse
 EOF
   ;;
 esac

@@ -20,6 +20,10 @@ pre_configure_target() {
                              -DBUILD_WSI_WAYLAND_SUPPORT=OFF \
                              -DCUBE_WSI_SELECTION=XCB"
   elif [ "${DISPLAYSERVER}" = "wl" ]; then
+    # Enable all three WSI backends on Wayland so that:
+    # - Native Wayland apps use the Wayland WSI
+    # - X11 apps (e.g. rpcs3, other X11 emulators) running via Xwayland
+    #   can use XCB or XLIB WSI paths.
     PKG_CMAKE_OPTS_TARGET+=" -DBUILD_CUBE=ON \
                              -DBUILD_WSI_XCB_SUPPORT=ON \
                              -DBUILD_WSI_XLIB_SUPPORT=ON \

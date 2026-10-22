@@ -1,0 +1,31 @@
+--- a/3rdparty/ccc/src/ccc/stabs_to_ast.cpp
++++ b/3rdparty/ccc/src/ccc/stabs_to_ast.cpp
+@@ -568,7 +568,7 @@
+ 		(*node)->size_bits = field.size_bits;
+ 		(*node)->set_access_specifier(stabs_field_visibility_to_access_specifier(field.visibility), state.importer_flags);
+ 		
+-		if(field.name.starts_with("$vf") || field.name.starts_with("_vptr$") || field.name.starts_with("_vptr.")) {
++		if(std::string_view(field.name).starts_with("$vf") || std::string_view(field.name).starts_with("_vptr$") || std::string_view(field.name).starts_with("_vptr.")) {
+ 			(*node)->is_vtable_pointer = true;
+ 		}
+ 		
+@@ -750,7 +750,7 @@
+ 		is_destructor |= info.name[0] == '~' && std::string_view(info.name).substr(1) == type_name_no_template_args; // Named destructor.
+ 	}
+ 	
+-	info.is_constructor_or_destructor = is_constructor || is_destructor || info.name.starts_with("$_");
++	info.is_constructor_or_destructor = is_constructor || is_destructor || std::string_view(info.name).starts_with("$_");
+ 	info.is_special_member_function = info.is_constructor_or_destructor || info.name == "operator=";
+ 	
+ 	return info;
+--- a/3rdparty/ccc/src/ccc/ast.cpp
++++ b/3rdparty/ccc/src/ccc/ast.cpp
+@@ -158,7 +158,7 @@
+ 		// that are different between translation units, so we don't want to
+ 		// compare them.
+ 		bool is_vtable_pointer = node_lhs.is_vtable_pointer && node_rhs.is_vtable_pointer;
+-		bool is_numbered_constructor = node_lhs.name.starts_with("$_") && node_rhs.name.starts_with("$_");
++		bool is_numbered_constructor = std::string_view(node_lhs.name).starts_with("$_") && std::string_view(node_rhs.name).starts_with("$_");
+ 		if(node_lhs.name != node_rhs.name && !is_vtable_pointer && !is_numbered_constructor) {
+ 			return CompareFailReason::NAME;
+ 		}

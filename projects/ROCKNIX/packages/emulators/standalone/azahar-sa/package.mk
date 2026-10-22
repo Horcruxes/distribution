@@ -34,10 +34,6 @@ PKG_CMAKE_OPTS_TARGET+=" -DENABLE_OPENGL=ON \
                          -DENABLE_VULKAN=ON \
                          -DUSE_DISCORD_PRESENCE=OFF"
 
-pre_configure_target() {
-  export CXXFLAGS+=-fpch-preprocess
-  export CFLAGS="${CFLAGS} -Wno-error=incompatible-pointer-types"
-}
 
 makeinstall_target() {
   mkdir -p ${INSTALL}/usr/bin

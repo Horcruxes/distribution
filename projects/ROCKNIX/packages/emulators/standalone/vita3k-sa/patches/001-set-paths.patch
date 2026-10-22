@@ -1,3 +1,4 @@
+diff --git a/vita3k/app/src/app_init.cpp b/vita3k/app/src/app_init.cpp
 --- a/vita3k/app/src/app_init.cpp
 +++ b/vita3k/app/src/app_init.cpp
 @@ -158,8 +158,7 @@
@@ -7,7 +8,7 @@
 -    auto sdl_base_path = SDL_GetBasePath();
 -    auto base_path = fs_utils::utf8_to_path(sdl_base_path);
 +    auto base_path = fs_utils::utf8_to_path("/storage/.config/vita3k");
- 
+
      root_paths.set_base_path(base_path);
      root_paths.set_static_assets_path(base_path);
 @@ -184,9 +183,7 @@
@@ -18,11 +19,11 @@
 -        auto pref_path = fs_utils::utf8_to_path(sdl_pref_path);
 -        SDL_free(sdl_pref_path);
 +        auto pref_path = fs_utils::utf8_to_path("/storage/roms/psvita/vita3k");
- 
+
  #if defined(__APPLE__)
          // Store other data in the user-wide path. Otherwise we may end up dumping
 @@ -272,6 +269,8 @@
- 
+
          // patch path should be in shared path
          root_paths.set_patch_path(root_paths.get_shared_path() / "patch" / "");
 +
