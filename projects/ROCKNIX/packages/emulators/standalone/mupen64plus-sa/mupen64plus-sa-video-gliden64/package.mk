@@ -7,14 +7,12 @@ PKG_LICENSE="GPL-2.0-or-later"
 PKG_SITE="https://github.com/gonetz/GLideN64"
 PKG_URL="${PKG_SITE}.git"
 PKG_DEPENDS_TARGET="toolchain boost libpng SDL2 SDL2_net zlib freetype nasm:host mupen64plus-sa-core"
-PKG_DEPENDS_UNPACK="mupen64plus-sa-core"
 PKG_LONGDESC="Mupen64Plus Standalone GLide64 Video Driver"
 PKG_TOOLCHAIN="manual"
 
 case ${DEVICE} in
   RK3588|S922X|RK3399|RK3566*|SM4450|SM8250|SM8550|SM8650|SM8750|AMD64)
     PKG_DEPENDS_TARGET+=" mupen64plus-sa-simplecore"
-    PKG_DEPENDS_UNPACK+=" mupen64plus-sa-simplecore"
     ;;
 esac
 

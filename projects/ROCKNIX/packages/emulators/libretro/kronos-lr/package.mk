@@ -16,6 +16,11 @@ case ${ARCH} in
   x86_64) platform="" ;;
 esac
 
+pre_configure_target() {
+  # the toolchain is built with --disable-libatomic; aarch64 atomics are native
+  sed -i 's/ -latomic//' ${PKG_BUILD}/yabause/src/libretro/Makefile
+}
+
 make_target() {
   make -C ${PKG_BUILD}/yabause/src/libretro/ generate-files CC="${HOSTCC}"
   make -C ${PKG_BUILD}/yabause/src/libretro/ ${platform} HAVE_CDROM=1 FORCE_GLES=0

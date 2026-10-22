@@ -12,10 +12,15 @@ PKG_DEPENDS_TARGET="autotools:host gcc:host ncurses"
 PKG_LONGDESC="The GNU Readline library provides a set of functions for use by applications that allow users to edit command lines as they are typed in."
 PKG_BUILD_FLAGS="+pic"
 
+# the termcap functions live in the wide termlib (libtinfow) here, so link it
+# into libreadline.so explicitly (readline otherwise leaves termcap symbols
+# unresolved, expecting consumers to link curses themselves)
 PKG_CONFIGURE_OPTS_TARGET="bash_cv_wcwidth_broken=no \
+                           bash_cv_termcap_lib=libncursesw \
                            --enable-shared \
                            --disable-static \
-                           --with-curses"
+                           --with-curses \
+                           --with-shared-termcap-library=-ltinfow"
 
 post_makeinstall_target() {
   rm -rf ${INSTALL}/usr/share/readline

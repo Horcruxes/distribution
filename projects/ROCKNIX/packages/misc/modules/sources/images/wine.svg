@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="100%" height="100%" viewBox="0 0 1200 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <rect id="Artboard1" x="0" y="0" width="1200" height="1080" style="fill:rgb(46,46,46);"/>
+  <path d="M 448 424 C 470 578 524 654 600 654 C 676 654 730 578 752 424 Z" style="fill:white;fill-rule:nonzero;"/>
+  <g style="fill:none;stroke:white;stroke-width:44;stroke-linecap:round;stroke-linejoin:round;">
+    <path d="M 396 236 C 396 508 468 664 600 664 C 732 664 804 508 804 236 Z"/>
+    <path d="M 600 664 L 600 856"/>
+    <path d="M 448 856 L 752 856"/>
+  </g>
+  <g style="fill:none;stroke:white;stroke-width:38;stroke-linecap:round;stroke-linejoin:round;">
+    <path d="M 852 300 L 852 560"/>
+    <path d="M 960 300 L 960 560"/>
+    <path d="M 852 424 L 960 424"/>
+    <path d="M 852 300 C 906 264 906 348 960 312"/>
+  </g>
+</svg>

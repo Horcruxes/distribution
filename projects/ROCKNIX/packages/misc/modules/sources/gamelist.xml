@@ -61,6 +61,18 @@
         <image>./images/portmaster.svg</image>
     </game>
     <game>
+        <path>./Wine Setup.sh</path>
+        <name>Wine Setup</name>
+        <desc>Creates or modifies a Wine game port in the Windows system. Walks through the executable, DXVK/VKD3D, ESYNC/FSYNC, sound and winetricks dependencies, and generates the launch script and controller mapping file. All ports share one Wine prefix at /storage/.wine.</desc>
+        <developer>PastorCatto</developer>
+        <publisher>ROCKNIX</publisher>
+        <rating>5.0</rating>
+        <releasedate>2026</releasedate>
+        <genre>Tool</genre>
+        <players>1</players>
+        <image>./images/wine.svg</image>
+    </game>
+    <game>
         <path>./cloud_backup.sh</path>
         <name>RCLONE Backup</name>
         <desc>Backup your saves to a cloud drive using RCLONE. Please make sure you have followed the steps at rocknix.org to set up RCLONE first.</desc>
@@ -124,6 +136,18 @@
         <path>./Uninstall Steam.sh</path>
         <name>Uninstall Steam</name>
         <desc>Removes the Steam client and runtime. Keeps installed games (steamapps), saves (userdata), and depot download cache.</desc>
+        <developer>ROCKNIX</developer>
+        <publisher>ROCKNIX</publisher>
+        <rating>5.0</rating>
+        <releasedate>2026</releasedate>
+        <genre>Tool</genre>
+        <players>1</players>
+        <image>./images/steam.svg</image>
+    </game>
+    <game>
+        <path>./Install Proton GE.sh</path>
+        <name>Install Proton GE</name>
+        <desc>Downloads or updates the latest Proton-GE build for games launched with umu-launcher. Installed into the Steam compatibilitytools.d path so Steam and umu share one Proton copy. Same task over SSH: install_proton_ge.sh</desc>
         <developer>ROCKNIX</developer>
         <publisher>ROCKNIX</publisher>
         <rating>5.0</rating>
@@ -376,7 +400,7 @@ it's recommended to have a mouse and keyboard to modify settings.</desc>
     <game>
         <path>./Start touchHLE.sh</path>
         <name>Start touchHLE</name>
-        <desc>Opens the touchHLE GUI (iOS) to enable global configuration changes to be made directly to the emulator. It's recommended to have a mouse and keyboard available to modify settings. A free and open-source application that emulates iOS games compatible with iOS 2 & 3, enabling people to play their iOS games on Windows, macOS, and Linux systems.</desc>
+        <desc>Opens the touchHLE GUI (iOS) to enable global configuration changes to be made directly to the emulator. It's recommended to have a mouse and keyboard available to modify settings. A free and open-source application that emulates iOS games compatible with iOS 2 &amp; 3, enabling people to play their iOS games on Windows, macOS, and Linux systems.</desc>
         <developer>ROCKNIX</developer>
         <publisher>ROCKNIX</publisher>
         <rating>5.0</rating>
@@ -456,18 +480,6 @@ it's recommended to have a mouse and keyboard to modify settings.</desc>
         <genre>tool</genre>
         <players>1</players>
         <image>./images/test-touchscreen.svg</image>
-    </game>
-    <game>
-        <path>./GPcal.sh</path>
-        <name>Calibrate Gamepad</name>
-        <desc>A gamepad tool that enables the user to calibrate the analog sticks and triggers on the Retroid Pocket 5 and Mini.</desc>
-        <developer>CDELETRE</developer>
-        <publisher>ROCKNIX</publisher>
-        <rating>5.0</rating>
-        <releasedate>2024</releasedate>
-        <genre>tool</genre>
-        <players>1</players>
-        <image>./images/calibrate-gamepad.svg</image>
     </game>
     <game>
         <path>./Mount NFS.sh</path>

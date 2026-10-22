@@ -21,7 +21,7 @@ case "${DEVICE}" in
     OPT_ENABLE_KERNEL=6.1.0
     ;;
   *)
-    OPT_ENABLE_KERNEL=6.10.0
+    OPT_ENABLE_KERNEL=7.1.2
     ;;
 esac
 
@@ -44,6 +44,7 @@ PKG_CONFIGURE_OPTS_TARGET="BASH_SHELL=/bin/sh \
                            --without-gd \
                            --disable-build-nscd \
                            --disable-nscd \
+                           --disable-werror \
                            --disable-timezone-tools"
 
 # ROCKNIX: new-compiler warning churn must not break the build

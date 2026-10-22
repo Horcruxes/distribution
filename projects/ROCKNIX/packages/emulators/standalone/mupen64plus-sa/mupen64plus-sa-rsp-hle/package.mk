@@ -8,14 +8,12 @@ PKG_LICENSE="GPL-2.0-or-later"
 PKG_SITE="https://github.com/mupen64plus/mupen64plus-rsp-hle"
 PKG_URL="${PKG_SITE}/archive/${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_TARGET="toolchain libpng SDL2 SDL2_net zlib freetype nasm:host mupen64plus-sa-core"
-PKG_DEPENDS_UNPACK="mupen64plus-sa-core"
 PKG_LONGDESC="Mupen64Plus Standalone RSP HLE"
 PKG_TOOLCHAIN="manual"
 
 case ${DEVICE} in
   RK3588|S922X|RK3399|RK3566*)
     PKG_DEPENDS_TARGET+=" mupen64plus-sa-simplecore"
-    PKG_DEPENDS_UNPACK+=" mupen64plus-sa-simplecore"
     ;;
 esac
 

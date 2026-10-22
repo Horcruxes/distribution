@@ -5,6 +5,7 @@
 
 PKG_DEPENDS_TARGET+=" libxcb libX11 libXrandr"
 
+
 pre_configure_target() {
   PKG_CMAKE_OPTS_TARGET="-DBUILD_TESTS=OFF \
                          -DCMAKE_BUILD_TYPE=Release"

@@ -3,7 +3,7 @@ Author: Stefan Saraev <stefan@saraev.ca>
 Date:   Tue Oct 1 12:09:07 2013 +0300
 
     fix dns with broken routers
-    
+
     ref: https://fedoraproject.org/wiki/Networking/NameResolution/ADDRCONFIG
 
 --- a/nss/getaddrinfo.c
@@ -11,13 +11,13 @@ Date:   Tue Oct 1 12:09:07 2013 +0300
 @@ -730,6 +730,38 @@ gaih_inet (const char *name, const struc
    if (res_ctx == NULL)
      no_more = 1;
- 
+
 +  /* AI_ADDRCONFIG determines whether or not we should suppress any
 +   * hostname lookups. If the local host has only IPv4 interfaces,
 +   * then suppress lookups for IPv6 addresses, and vice versa; if
 +   * the local host has only IPv6 interfaces, suppress any lookups
 +   * for IPv4 addresses..
-+   * 
++   *
 +   * Link-local IPv6 addresses and loopback addresses of either
 +   * family are ignored when determining whether or not the host has
 +   * an interface of the given address family, cf. __check_pf().
@@ -48,16 +48,16 @@ Date:   Tue Oct 1 12:09:07 2013 +0300
      {
        no_data = 0;
 @@ -737,7 +769,7 @@ gaih_inet (const char *name, const struc
- 
+
        /* gethostbyname4_r sends out parallel A and AAAA queries and
  	 is thus only suitable for PF_UNSPEC.  */
 -      if (req->ai_family == PF_UNSPEC)
 +      if (req->ai_family == PF_UNSPEC && !suppress_af)
  	fct4 = __nss_lookup_function (nip, "gethostbyname4_r");
- 
+
        if (fct4 != NULL)
 @@ -826,25 +858,27 @@ gaih_inet (const char *name, const struc
- 
+
  	  if (fct != NULL)
  	    {
 -	      if (req->ai_family == AF_INET6
